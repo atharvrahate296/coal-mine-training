@@ -18,6 +18,7 @@ public class ImageTargetHandler : MonoBehaviour
     public static int score = 0;
     public static int totalAnswered = 0;
     public static HashSet<string> itemsSeen = new HashSet<string>();
+    public TextMeshProUGUI scoreText;
 
     private class ItemData
     {
@@ -150,6 +151,8 @@ public class ImageTargetHandler : MonoBehaviour
     {
         totalAnswered++;
         if (correct) score++;
+        if (scoreText != null)
+            scoreText.text = "Score: " + score + "/" + totalAnswered;
 
         TextMeshProUGUI textComponent = panelObject.GetComponentInChildren<TextMeshProUGUI>();
         if (textComponent != null)
