@@ -3,14 +3,14 @@
 VR/AR-Based Safety Training and Skill Assessment System for High-Risk Coal Mining Operations.
 
 A single Android application containing two modes:
-- **AR Mode** — recognizes real-world mining equipment (via a printed/photographed image) and overlays safety information, warnings, and inspection steps.
-- **VR Mode** — a phone-based VR walkthrough of a simulated mine environment where trainees practice responding to high-risk hazard scenarios (e.g. gas leaks, fire, equipment failure).
+- **AR Mode** — recognizes real-world mining safety equipment and warning signs (via a printed/photographed reference image), shows information about each item, then asks a short question to test the trainee's understanding and tracks a live score.
+- **VR Mode** — a phone-based VR walkthrough of a simulated mine environment where trainees practice responding to high-risk hazard scenarios (e.g. gas leaks, fire, equipment failure). Shown on the main menu as "Coming Soon."
 
 ---
 
 ## Project Status
 
-🚧 **In development.** Currently working AR foundation: camera pass-through, plane detection, tap-to-place, and image recognition (Image Target) are functional. VR Mode, scoring system, backend, and dashboard are not yet started.
+🚧 **In development.** AR Mode is functional end-to-end: main menu, camera pass-through, image recognition, info panels, quiz questions, and a live score counter all work and have been tested on a physical device (Samsung Galaxy S24 FE). VR Mode, results screen, backend, and dashboard are not yet started.
 
 ---
 
@@ -33,9 +33,9 @@ A single Android application containing two modes:
 CoalMineVR/
 ├── Assets/
 │   ├── ARImages/       # Reference images used for AR Image Target recognition
-│   ├── Prefabs/        # Reusable objects (e.g. placement Cube)
-│   ├── Scenes/         # Unity scenes
-│   ├── Scripts/        # C# scripts (AR/VR logic)
+│   ├── Prefabs/        # Reusable objects (info panel Canvas, placement Cube)
+│   ├── Scenes/         # Unity scenes (MainMenu, ARMode)
+│   ├── Scripts/        # C# scripts (menu, AR/quiz logic)
 │   └── Settings/       # URP render pipeline & project settings assets
 ├── Packages/           # Unity package dependencies
 ├── ProjectSettings/    # Unity project configuration
@@ -73,8 +73,15 @@ git clone https://github.com/bramhagulavani/coal-mine-training.git
 `Edit → Preferences → External Tools → External Script Editor → Visual Studio Code`
 
 ### 6. Verify setup
-- `File → Build Settings` should show **Android** as the active platform
+- `File → Build Profiles` should show **Android** as the active platform, with `MainMenu` as scene 0 and `ARMode` as scene 1
 - `Window → Package Manager` should list **AR Foundation**, **ARCore XR Plugin**, **XR Interaction Toolkit**, **OpenXR Plugin**
+- `Assets → Settings → Mobile_Renderer` should have an **AR Background Renderer Feature** listed (required for the camera feed to display — without it the screen shows solid yellow)
+
+### 7. Running on a phone
+- Phone must be **ARCore-supported** (check Google's official list if unsure)
+- Enable **USB debugging** (Settings → About phone → tap Build number 7 times → Developer options → USB debugging)
+- Connect via USB, tap **Allow** on the phone's debugging prompt
+- In Build Profiles, select the phone under **Run Device**, click **Build And Run**
 
 ---
 
@@ -96,15 +103,24 @@ git push
 
 ## Current Features Implemented
 
+- [x] Main menu with Start AR Mode and VR Mode (Coming Soon) buttons
 - [x] AR camera pass-through (fixed via AR Background Renderer Feature on URP Renderer)
-- [x] AR plane detection + tap-to-place object
-- [x] AR Image Target recognition (tested with a placeholder image; real equipment photos pending)
-- [ ] AR equipment info overlay UI (name, warning, inspection steps)
+- [x] AR plane detection + tap-to-place object (early pipeline test)
+- [x] AR Image Target recognition — six items: Safety Helmet, Gas Mask, Danger: Toxic Gas sign, Roof Instability sign, Escape Route sign, Multi Gas Detector
+- [x] Floating info panel per recognized image, billboard-facing the camera for readability
+- [x] Quiz layer: each item shows a question with two tappable answers after a short delay, marked correct/incorrect
+- [x] Live on-screen score counter (Score: X/Y)
+- [ ] Results screen summarizing session performance
 - [ ] VR mine environment
 - [ ] VR hazard scenario with gaze-based interaction
-- [ ] Scoring and feedback system
 - [ ] Backend (Node.js + MongoDB)
 - [ ] Trainer dashboard (React)
+
+---
+
+## Content Source
+
+AR item content is based on a domain survey grounded in the SIH 2022 problem statement **NC737** (Coal India Limited), covering the equipment and warning signs real miners rely on underground.
 
 ---
 
